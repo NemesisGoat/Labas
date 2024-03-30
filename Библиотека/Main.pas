@@ -18,6 +18,8 @@ begin
     writeln('3. Векторы');
     writeln('4. Копмлексные векторы');
     writeln('5. Разное');
+    writeln('6. Стеки');
+    writeln('7. Очереди');
     writeln('0. Выход');
     goToXY(40, 23);
     read(Mode);

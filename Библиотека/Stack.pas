@@ -11,17 +11,17 @@ type
   Next: Ptr;
 end;
 
-var Top, Kon: Ptr;
+var Top, Kon, Kon2,Top1,Top2: Ptr;
     value: integer;
 
-procedure MakeStack;
-procedure ViewStack;
-procedure AddStack;
+procedure MakeStack(Var Top: Ptr);
+procedure ViewStack(Var Top: Ptr);
+procedure AddStack(Var Top: Ptr);
 procedure MenuStack;
 
 implementation
 
-procedure MakeStack;
+procedure MakeStack(Var Top: Ptr);
   var Ok: boolean;
   begin
     Ok := true;
@@ -47,7 +47,7 @@ begin
   while KeyPressed do ReadKey;
 end;
 
-procedure ViewStack;
+procedure ViewStack(Var Top: Ptr);
 begin
   Kon := Top;
   while Kon <> nil do
@@ -58,17 +58,32 @@ begin
   Wait;
 end;
 
-procedure AddStack;
+procedure AddStack(Var Top: Ptr);
 var Ok: boolean;
 begin
   Ok := true;
-  Top := nil;
   while Ok do
   begin
     writeln('Добавьте число');
     readln(Value);
-    if Value = 999 then Ok := false;
+    if Value = 999 then Ok := false
+    else
+    begin
+      New(Kon);
+      Kon^.Next := Top;
+      Kon^.Inf := value;
+      Top := Kon;
+    end;
   end;
+end;
+
+procedure ConStack(Var Top1, Top2: Ptr);
+begin
+  Kon2 := Top2;
+  while Kon2^.Next  <> nil do
+    Kon2 := Kon2^.Next;
+  Kon2^.Next := Top1;
+  Top1 := Top2;
 end;
 
 procedure MenuStack;
@@ -82,6 +97,7 @@ begin
     writeln(' 1: Создать стек');
     writeln(' 2: Просмотреть стек');
     writeln(' 3: Добавить элемент в стек');
+    writeln(' 4: Соединить стеки');
     writeln(' 0: Выйти в предыдущее меню');
     GoToXY(40, 23);
     readln(Mode);
@@ -90,9 +106,10 @@ begin
     ClrScr;
     
     case Mode of
-    1: MakeStack;
-    2: ViewStack;
-    3: AddStack;
+    1: MakeStack(Top1);
+    2: ViewStack(Top1);
+    3: AddStack(Top1);
+    4: begin ClrScr; MakeStack(Top2); ConStack(Top1,Top2); ClrScr; ViewStack(Top1);  Wait end;
     0: Ok := False;
     else
     begin
