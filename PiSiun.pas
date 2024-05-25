@@ -24,6 +24,7 @@ procedure MakeMenuHoriz;
 procedure MakeMenuVertic(Var Vertic:PtrVertic);
 procedure ChoiceMenuHoriz;
 procedure PutMenuVertic(Vertic: PtrVertic; n: integer);
+procedure ReverseStackHoriz(Var Top: PtrHoriz);
 procedure MenuPiSiun;
 
 Implementation
@@ -32,6 +33,23 @@ procedure Wait;
 begin
   repeat until KeyPressed;
   while KeyPressed do ReadKey;
+end;
+
+procedure ReverseStackHoriz(Var Top: PtrHoriz);  // Переворот горизонтального меню
+var tmp, Kon: PtrHoriz;
+begin
+  Kon := Top;
+  Top := Nil;
+  while Kon <> Nil do
+  begin
+    New(Top);
+    Top^.Next := tmp;
+    Top^.Group := Kon^.Group;
+    Top^.Number := Kon^.Number;
+    Top^.Head := Kon^.Head;
+    Kon := Kon^.Next;
+    tmp := Top
+  end;
 end;
 
 procedure MakeMenuHoriz;
@@ -60,8 +78,8 @@ begin
         Horiz:=Top;
       end;
     end;
+    //ReverseStackHoriz(Horiz);
 end;
-
 
 procedure MakeMenuVertic(Var Vertic:PtrVertic);
   var Top:PtrVertic;
@@ -110,6 +128,7 @@ begin
   Top:=Horiz;
   k:=Horiz^.Number + 1;
   while (Top^.Number + n <> k) do
+  writeln(Top^.Number);  
   Top:=Top^.Next;
   PutMenuVertic(Top^.Head, n);
 end;
